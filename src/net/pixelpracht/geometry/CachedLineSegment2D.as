@@ -1,3 +1,7 @@
+/*******************************************************************************
+ * Copyright (c) 2009 by Thomas Jahn
+ * Questions? Mail me at lithander@gmx.de!
+ ******************************************************************************/
 package net.pixelpracht.geometry
 {
 	public class CachedLineSegment2D extends LineSegment2D

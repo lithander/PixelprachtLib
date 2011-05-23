@@ -93,7 +93,15 @@ package net.pixelpracht.geometry
 			width = w;
 			height = h;
 			return this;
-		}		
+		}
+		
+		/**
+		 * Returns a new Rectangle2D that equals this one. 
+		 */
+		public function clone():Rectangle2D
+		{
+			return new Rectangle2D( x, y, width, height );
+		}
 		
 		/**
 		 * Tests if the rectangle includes the vector.
@@ -112,18 +120,24 @@ package net.pixelpracht.geometry
 			return true;
 		}
 		
-		public function addMargin(margin:Number):void
+		public function equals(other:Rectangle2D):Boolean
+		{
+			return x == other.x && y == other.y && width == other.width && height == other.height;
+		}
+		
+		public function addMargin(margin:Number):Rectangle2D
 		{
 			x -= margin;
 			y -= margin;
 			width += 2*margin;
 			height += 2*margin;
+			return this;
 		}
 		
 		/**
 		 * Enlarges the rectangle to include the position.
 		 */
-		public function addPosition(px:Number, py:Number):void
+		public function addPosition(px:Number, py:Number):Rectangle2D
 		{
 			if(px < x)
 			{
@@ -140,12 +154,13 @@ package net.pixelpracht.geometry
 			}
 			if(py > y+height)
 				height += py-y;
+			return this;
 		}
 				
 		/**
 		 * Enlarges the rectangle to include the vector.
 		 */
-		public function addVector(v:Vector2D):void
+		public function addVector(v:Vector2D):Rectangle2D
 		{
 			if(v.x < x)
 			{
@@ -162,12 +177,13 @@ package net.pixelpracht.geometry
 			}
 			if(v.y > y+height)
 				height += v.y-y;
+			return this;
 		}
 		
 		/**
 		 * Enlarges the rectangle to include the rect.
 		 */
-		public function addRect(r:Rectangle2D):void
+		public function addRect(r:Rectangle2D):Rectangle2D
 		{
 			if(r.x < x)
 			{
@@ -175,7 +191,7 @@ package net.pixelpracht.geometry
 				x = r.x;
 			}
 			if(r.right > x+width)
-				width += r.right-x;
+				width = r.right-x;
 			
 			if(r.y < y)
 			{
@@ -183,7 +199,8 @@ package net.pixelpracht.geometry
 				y = r.y;
 			}
 			if(r.bottom > y+height)
-				height += r.bottom-y;
+				height = r.bottom-y;
+			return this;
 		}
 		
 		/**
