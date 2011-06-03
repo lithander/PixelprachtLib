@@ -17,7 +17,7 @@ package net.pixelpracht.geometry
 		public static const PI:Number = Math.PI;
 		public static const TwoPI:Number = Math.PI*2;
 		
-		/*
+		/**
 		* Normalizes angle to be between -PI and +PI.
 		*/		
 		public static function normalizeRad(angle:Number):Number
@@ -29,7 +29,7 @@ package net.pixelpracht.geometry
 			return angle;
 		}		
 		
-		/*
+		/**
 		* Normalizes angle to be between -180 and +180.
 		*/		
 		public static function normalizeDeg(angle:Number):Number
@@ -41,7 +41,7 @@ package net.pixelpracht.geometry
 			return angle;
 		}
 		
-		/*
+		/**
 		* Normalizes angle to be between 0 and 2PI.
 		*/		
 		public static function normalizeRad2(angle:Number):Number
@@ -53,7 +53,7 @@ package net.pixelpracht.geometry
 			return angle;
 		}		
 		
-		/*
+		/**
 		* Normalizes angle to be between 0 and +360.
 		*/		
 		public static function normalizeDeg2(angle:Number):Number

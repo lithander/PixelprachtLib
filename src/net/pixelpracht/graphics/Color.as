@@ -1,5 +1,7 @@
 package net.pixelpracht.graphics
 {
+	import flash.geom.ColorTransform;
+	
 	import net.pixelpracht.geometry.Angle;
 
 	public class Color
@@ -16,6 +18,21 @@ package net.pixelpracht.graphics
 			blue = b;
 			alpha = a;
 		}
+		
+		/**
+		 * Set Hue [0..2PI], Saturation [0..1] and Value [0..1]
+		 */	
+		public static function fromHSV(hue:Number, saturation:Number, value:Number):Color
+		{
+			var result:Color = new Color();
+			result.setHSV(hue, saturation, value);
+			return result;
+		}
+		
+		public function toColorTransform():ColorTransform
+		{
+			return new ColorTransform(red, green, blue, alpha);
+		}	
 		
 		public function get redByte():uint
 		{
@@ -67,6 +84,9 @@ package net.pixelpracht.graphics
 			alpha = a / 255;
 		}
 		
+		/**
+		* Set Hue [0..2PI], Saturation [0..1] and Value [0..1]
+		*/	
 		public function setHSV(hue:Number, saturation:Number, value:Number):void
 		{
 			hue = Angle.normalizeRad2(hue);
