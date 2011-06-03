@@ -1,3 +1,7 @@
+/*******************************************************************************
+ * Copyright (c) 2009 by Thomas Jahn
+ * Questions? Mail me at lithander@gmx.de!
+ ******************************************************************************/
 package net.pixelpracht.algorithm
 {
 	import net.pixelpracht.geometry.Rectangle2D;
