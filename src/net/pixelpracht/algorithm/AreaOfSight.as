@@ -60,7 +60,8 @@ package net.pixelpracht.algorithm
 			max = occluders.length;
 			for(i = 0; i < max; i++)
 			{
-				if(clipRect.clipTo(occluders[i], segment))
+				segment.copy(occluders[i]);
+				if(clipRect.clipLine(segment))
 				{
 					_occluders.push(segment);
 					segment = _popSeg();					
@@ -316,8 +317,7 @@ package net.pixelpracht.algorithm
 					var angle:Number = _helper.polarAngle;
 					if(Math.abs(angle - _currentAngle) > 0.0001) //combat glitches due to limitted precision
 					{
-						var inRange:Boolean = Angle.isEnclosedRad(angle, _currentAngle, bestAngle);
-						if(inRange)
+						if(angle > _currentAngle && angle < bestAngle)
 						{
 							bestPoint = intersection;
 							bestSeg = seg;
