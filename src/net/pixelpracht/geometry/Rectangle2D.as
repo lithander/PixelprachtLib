@@ -125,6 +125,9 @@ package net.pixelpracht.geometry
 			return x == other.x && y == other.y && width == other.width && height == other.height;
 		}
 		
+		/**
+		 * Enlarges the rectangle by margin in all directions
+		 */
 		public function addMargin(margin:Number):Rectangle2D
 		{
 			x -= margin;
@@ -133,6 +136,36 @@ package net.pixelpracht.geometry
 			height += 2*margin;
 			return this;
 		}
+		
+		/**
+		 * Shrinks the rectangle by mapping top and left to the smallest following and right 
+		 * and bottom to the largest previous integer
+		 */
+		public function shrinkFrac():Rectangle2D
+		{
+			var x2:Number = Math.floor(x + width);
+			var y2:Number = Math.floor(y + height);
+			x = Math.ceil(x);
+			y = Math.ceil(y);
+			width = x2 - x;
+			height = y2 - y;
+			return this;						
+		}
+		
+		/**
+		 * Expands the rectangle by mapping top and left to the largest previous and right 
+		 * and bottom to the smallest following integer
+		 */		
+		public function expandFrac():Rectangle2D
+		{
+			var x2:Number = Math.ceil(x + width);
+			var y2:Number = Math.ceil(y + height);
+			x = Math.floor(x);
+			y = Math.floor(y);
+			width = x2 - x;
+			height = y2 - y;
+			return this;							
+		}		
 		
 		/**
 		 * Enlarges the rectangle to include the position.
@@ -219,6 +252,14 @@ package net.pixelpracht.geometry
 		public function snapped(v:Vector2D):Vector2D
 		{
 			return new Vector2D(Math.max(x, Math.min(right, v.x)), Math.max(y, Math.min(bottom, v.y)));
+		}
+		
+		/**
+		 * Returns true if rect is completely outside of this;
+		 */
+		public function isRectOutside(rect:Rectangle2D):Boolean
+		{
+			return (rect.x > x+width) || (rect.y > y+height) || (rect.right < x) || (rect.bottom < y);
 		}
 		
 		/**
