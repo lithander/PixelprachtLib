@@ -338,7 +338,8 @@ package net.pixelpracht.geometry
 		}
 		
 		/**
-		 * Constrains a linesegment to fit in the rectangle. Uses Liang Barsky Algorithm.
+		 * Constrains a linesegment to fit in the rectangle. Uses Liang Barsky Algorithm. 
+		 * Returns reference to the passed input argument after clipping or null if no portion of the line is within the rectangle.
 		 */
 		public function clipLine(line:LineSegment2D):LineSegment2D
 		{

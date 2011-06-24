@@ -67,15 +67,36 @@ package net.pixelpracht.geometry
 		
 		/**
 		 * Is an angle in the cone defined by min & max?
-		 * Assumes angles are normalized to be between -PI and +PI.
+		 * Assumes angles are normalized.
+		 */		
+		public static function isEnclosedNorm(angle:Number, min:Number, max:Number):Boolean
+		{
+			return (angle > min && angle < max);
+		}	
+		
+		/**
+		 * Is an angle (degree) in the cone defined by min & max?
+		 */		
+		public static function isEnclosedDeg(angle:Number, min:Number, max:Number):Boolean
+		{
+			while( angle > max)
+				angle -= 360;
+			while( angle < min)
+				angle += 360;
+			return (angle > min && angle < max);
+		}	
+		
+		/**
+		 * Is a radian angle in the cone defined by min & max?
 		 */		
 		public static function isEnclosedRad(angle:Number, min:Number, max:Number):Boolean
 		{
-			angle += PI;
-			min += PI;
-			max += PI;
+			while( angle > max)
+				angle -= PI;
+			while( angle < min)
+				angle += PI;
 			return (angle > min && angle < max);
-		}
+		}		
 		
 		/**
 		 * These companion methods will convert radians to degrees

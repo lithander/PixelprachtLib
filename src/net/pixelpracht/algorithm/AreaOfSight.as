@@ -64,7 +64,7 @@ package net.pixelpracht.algorithm
 			for(i = 0; i < max; i++)
 			{
 				segment.copy(occluders[i]);
-				if(clipRect.clip(segment))
+				if(clipRect.clipLine(segment))
 				{
 					_occluders.push(segment);
 					segment = _popSeg();					

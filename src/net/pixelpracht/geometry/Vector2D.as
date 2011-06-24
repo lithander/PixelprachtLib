@@ -416,7 +416,7 @@ package net.pixelpracht.geometry
 		 */
 		public function get polarAngle():Number
 		{	
-			return Math.atan2(y, x);
+			return Math.atan2(y, x) + Math.PI;
 			/* 
 			//the same effect but a lot slower..
 			var r:Number = length;
