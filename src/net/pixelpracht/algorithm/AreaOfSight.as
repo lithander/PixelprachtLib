@@ -12,6 +12,7 @@ package net.pixelpracht.algorithm
 
 	public class AreaOfSight implements IAreaOfSight
 	{
+		public var epsilon:Number = 0.0005;
 		//input
 		private var _viewPos:Vector2D = new Vector2D();
 		private var _occluders:Array = [];
@@ -282,9 +283,9 @@ package net.pixelpracht.algorithm
 					cur = cur.next;
 					continue;
 				}
-				var relation:int = _current.getRelation(seg);
+				var relation:int = _current.getRelation(seg, epsilon);
 				//seg.start touches and seg.end visible? (seg.endAngle > _currentAngle)
-				if(relation == LineSegment2D.OTHER_START_TOUCHES_THIS && seg.endDist < seg.startDist)
+				if(relation == LineSegment2D.OTHER_START_TOUCHES_THIS && seg.endDist < (seg.startDist+epsilon))
 				{
 					//touch is new current if angle < bestAngle
 					if(seg.startAngle < bestAngle)
@@ -295,7 +296,7 @@ package net.pixelpracht.algorithm
 					}
 				}
 				//seg.end touches and seg.start visible? (seg.startAngle > _currentAngle)
-				else if(relation == LineSegment2D.OTHER_END_TOUCHES_THIS && seg.startDist < seg.endDist)
+				else if(relation == LineSegment2D.OTHER_END_TOUCHES_THIS && seg.startDist < (seg.endDist+epsilon))
 				{
 					//touch is new current if angle < bestAngle
 					if(seg.endAngle < bestAngle)

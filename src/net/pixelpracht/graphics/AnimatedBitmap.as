@@ -4,7 +4,7 @@ package net.pixelpracht.graphics
 	import flash.display.BitmapData;
 	import flash.events.Event;
 	
-	import net.pixelpracht.txa.ImageAtlas;
+	import net.pixelpracht.data.ImageAtlas;
 	
 	public class AnimatedBitmap extends Bitmap
 	{

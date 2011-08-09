@@ -54,7 +54,20 @@ package net.pixelpracht.geometry
 		public function get bottom():Number
 		{
 			return y + height;
-		}		
+		}
+		
+		public function get center():Vector2D
+		{
+			return new Vector2D(x+width/2, y+height/2);	
+		}
+		
+		/**
+		 * Creates a rect around a central point Vector2D.
+		 */
+		public static function fromCenterPoint( pt:Vector2D, w:Number = 0, h:Number = 0 ):Rectangle2D
+		{
+			return new Rectangle2D( pt.x-w/2, pt.y-h/2, w, h );
+		}
 		
 		/**
 		 * Constructor
@@ -178,7 +191,7 @@ package net.pixelpracht.geometry
 				x = px;
 			}
 			if(px > x+width)
-				width += px-x;
+				width += px-(x+width);
 			
 			if(py < y)
 			{
@@ -186,7 +199,7 @@ package net.pixelpracht.geometry
 				y = py;
 			}
 			if(py > y+height)
-				height += py-y;
+				height += py-(y+height);
 			return this;
 		}
 				
@@ -201,7 +214,7 @@ package net.pixelpracht.geometry
 				x = v.x;
 			}
 			if(v.x > x+width)
-				width += v.x-x;
+				width += v.x-(x+width);
 
 			if(v.y < y)
 			{
@@ -209,7 +222,7 @@ package net.pixelpracht.geometry
 				y = v.y;
 			}
 			if(v.y > y+height)
-				height += v.y-y;
+				height += v.y-(y+height);
 			return this;
 		}
 		

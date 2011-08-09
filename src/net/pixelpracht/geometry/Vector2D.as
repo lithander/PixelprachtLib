@@ -250,7 +250,7 @@ package net.pixelpracht.geometry
 		/**
 		 * Rotate a copy of this vector that is orthogonal/perpendicular. (cw rotation by 90°).
 		 */
-		public function orthogonalized():Vector2D
+		public function turnedRight():Vector2D
 		{
 			return new Vector2D(-y,x);
 		}
@@ -258,13 +258,32 @@ package net.pixelpracht.geometry
 		/**
 		 * Rotate this vector cw by 90° and return a reference to self.
 		 */
-		public function orthogonalize():Vector2D
+		public function turnRight():Vector2D
 		{
 			var tmp:Number = x;
 			x = -y;
 			y = tmp;
 			return this;
-		}		
+		}	
+		
+		/**
+		 * Rotate a copy of this vector that is orthogonal/perpendicular. (ccw rotation by 90°).
+		 */
+		public function turnedLeft():Vector2D
+		{
+			return new Vector2D(y,-x);
+		}
+		
+		/**
+		 * Rotate this vector cw by 90° and return a reference to self.
+		 */
+		public function turnLeft():Vector2D
+		{
+			var tmp:Number = x;
+			x = y;
+			y = -tmp;
+			return this;
+		}	
 		
 		/**
 		 * Scales this vector to have unit length and returns a reference to self.
@@ -280,8 +299,8 @@ package net.pixelpracht.geometry
 			}
 			else
 			{
-				x = undefined;
-				y = undefined;
+				x = 0;
+				y = 0;
 			}
 			return this;
 		}
@@ -390,7 +409,8 @@ package net.pixelpracht.geometry
 		 */
 		public function set length(newLen:Number):void
 		{
-			var f:Number = newLen / Math.sqrt(lengthSquared);
+			var len:Number = Math.sqrt(lengthSquared);
+			var f:Number = (len > 0) ? newLen / len : 0;
 			x *= f;
 			y *= f;
 		}

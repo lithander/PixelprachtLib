@@ -247,6 +247,14 @@ package net.pixelpracht.geometry
 		public function distance( v:Vector2D ):Number
 		{
 			return snapped(v).distance(v);
+		}
+		
+		/**
+		 * Returns the square of the distance of the vector to its closest point on this line segment.
+		 */		
+		public function distanceSquared( v:Vector2D ):Number
+		{
+			return snapped(v).distanceSquared(v);
 		}		
 	
 		/**
