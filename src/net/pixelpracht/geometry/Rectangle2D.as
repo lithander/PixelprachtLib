@@ -145,7 +145,7 @@ package net.pixelpracht.geometry
 				x = px;
 			}
 			if(px > x+width)
-				width += px-x;
+				width = px-x;
 			
 			if(py < y)
 			{
@@ -153,7 +153,7 @@ package net.pixelpracht.geometry
 				y = py;
 			}
 			if(py > y+height)
-				height += py-y;
+				height = py-y;
 			return this;
 		}
 				
@@ -168,7 +168,7 @@ package net.pixelpracht.geometry
 				x = v.x;
 			}
 			if(v.x > x+width)
-				width += v.x-x;
+				width = v.x-x;
 
 			if(v.y < y)
 			{
@@ -176,7 +176,7 @@ package net.pixelpracht.geometry
 				y = v.y;
 			}
 			if(v.y > y+height)
-				height += v.y-y;
+				height = v.y-y;
 			return this;
 		}
 		
