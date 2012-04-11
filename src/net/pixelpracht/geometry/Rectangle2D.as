@@ -54,7 +54,20 @@ package net.pixelpracht.geometry
 		public function get bottom():Number
 		{
 			return y + height;
-		}		
+		}
+		
+		public function get center():Vector2D
+		{
+			return new Vector2D(x+width/2, y+height/2);	
+		}
+		
+		/**
+		 * Creates a rect around a central point Vector2D.
+		 */
+		public static function fromCenterPoint( pt:Vector2D, w:Number = 0, h:Number = 0 ):Rectangle2D
+		{
+			return new Rectangle2D( pt.x-w/2, pt.y-h/2, w, h );
+		}
 		
 		/**
 		 * Constructor
@@ -125,6 +138,9 @@ package net.pixelpracht.geometry
 			return x == other.x && y == other.y && width == other.width && height == other.height;
 		}
 		
+		/**
+		 * Enlarges the rectangle by margin in all directions
+		 */
 		public function addMargin(margin:Number):Rectangle2D
 		{
 			x -= margin;
@@ -133,6 +149,36 @@ package net.pixelpracht.geometry
 			height += 2*margin;
 			return this;
 		}
+		
+		/**
+		 * Shrinks the rectangle by mapping top and left to the smallest following and right 
+		 * and bottom to the largest previous integer
+		 */
+		public function shrinkFrac():Rectangle2D
+		{
+			var x2:Number = Math.floor(x + width);
+			var y2:Number = Math.floor(y + height);
+			x = Math.ceil(x);
+			y = Math.ceil(y);
+			width = x2 - x;
+			height = y2 - y;
+			return this;						
+		}
+		
+		/**
+		 * Expands the rectangle by mapping top and left to the largest previous and right 
+		 * and bottom to the smallest following integer
+		 */		
+		public function expandFrac():Rectangle2D
+		{
+			var x2:Number = Math.ceil(x + width);
+			var y2:Number = Math.ceil(y + height);
+			x = Math.floor(x);
+			y = Math.floor(y);
+			width = x2 - x;
+			height = y2 - y;
+			return this;							
+		}		
 		
 		/**
 		 * Enlarges the rectangle to include the position.
@@ -222,6 +268,14 @@ package net.pixelpracht.geometry
 		}
 		
 		/**
+		 * Returns true if rect is completely outside of this;
+		 */
+		public function isRectOutside(rect:Rectangle2D):Boolean
+		{
+			return (rect.x > x+width) || (rect.y > y+height) || (rect.right < x) || (rect.bottom < y);
+		}
+		
+		/**
 		 * Returns 2 if surrounding, 1 if inside, 0 if intersecting and -1 outside.
 		 */
 		public function getRectRelation(rect:Rectangle2D):Number
@@ -297,7 +351,8 @@ package net.pixelpracht.geometry
 		}
 		
 		/**
-		 * Constrains a linesegment to fit in the rectangle. Uses Liang Barsky Algorithm.
+		 * Constrains a linesegment to fit in the rectangle. Uses Liang Barsky Algorithm. 
+		 * Returns reference to the passed input argument after clipping or null if no portion of the line is within the rectangle.
 		 */
 		public function clipLine(line:LineSegment2D):LineSegment2D
 		{

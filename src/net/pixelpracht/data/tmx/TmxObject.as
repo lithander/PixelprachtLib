@@ -2,7 +2,7 @@
  * Copyright (c) 2010 by Thomas Jahn
  * Questions or license requests? Mail me at lithander@gmx.de!
  ******************************************************************************/
-package net.pixelpracht.tmx 
+package net.pixelpracht.data.tmx 
 {
 	public class TmxObject
 	{

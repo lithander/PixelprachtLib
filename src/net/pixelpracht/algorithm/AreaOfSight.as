@@ -1,7 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2010 by Thomas Jahn
+ * Questions? Mail me at lithander@gmx.de!
+ ******************************************************************************/
 package net.pixelpracht.algorithm
 {
 	import net.pixelpracht.container.QueueNode;
-	import net.pixelpracht.geometry.Angle;
 	import net.pixelpracht.geometry.CachedLineSegment2D;
 	import net.pixelpracht.geometry.LineSegment2D;
 	import net.pixelpracht.geometry.Rectangle2D;
@@ -9,6 +12,7 @@ package net.pixelpracht.algorithm
 
 	public class AreaOfSight implements IAreaOfSight
 	{
+		public var epsilon:Number = 0.0005;
 		//input
 		private var _viewPos:Vector2D = new Vector2D();
 		private var _occluders:Array = [];
@@ -60,7 +64,8 @@ package net.pixelpracht.algorithm
 			max = occluders.length;
 			for(i = 0; i < max; i++)
 			{
-				if(clipRect.clipTo(occluders[i], segment))
+				segment.copy(occluders[i]);
+				if(clipRect.clipLine(segment))
 				{
 					_occluders.push(segment);
 					segment = _popSeg();					
@@ -85,17 +90,13 @@ package net.pixelpracht.algorithm
 			//2. initialize _openList
 			_openList.clear();
 			traverseEvents();
-			//3. identify segment to start with (closest at -pi)
+			//3. identify segment to start with (closest at 0°)
+			_currentAngle = 0;
 			_currentPoint = null;
 			_currentDir = new LineSegment2D(_viewPos.x, _viewPos.y, _viewPos.x - 1, _viewPos.y); 
 			_current = getClosestIntersection(_currentDir);
-			_currentAngle = -Math.PI;//_current.clockwise ? _current.startAngle : _current.endAngle;
-			//4. traverse events
+			//2. traverse events
 			traverseEvents(handleStartEvent, handleEndEvent);
-			//5. close the polygon (handle remaining intersections)
-			_helper.copy(_outline[0]);
-			_helper.subtract(_viewPos);
-			handleIntersections(_helper.polarAngle+Math.PI * 2);
 			return _outline;
 		}
 		
@@ -187,9 +188,9 @@ package net.pixelpracht.algorithm
 				}
 				else if(ee)
 				{
+					_openList.remove(ee.segment);
 					if(onEnd != null)
 						onEnd.call(this, ee);
-					_openList.remove(ee.segment);
 					iEnd++;
 				}
 			}	
@@ -219,7 +220,6 @@ package net.pixelpracht.algorithm
 		private function handleEndEvent(e:AngularEvent):void
 		{
 			handleIntersections(e.angle);
-			
 			//did 'current' end?
 			if(_current != e.segment)
 				return; //OTHER DOES NOT MATTER
@@ -283,9 +283,9 @@ package net.pixelpracht.algorithm
 					cur = cur.next;
 					continue;
 				}
-				var relation:int = _current.getRelation(seg);
+				var relation:int = _current.getRelation(seg, epsilon);
 				//seg.start touches and seg.end visible? (seg.endAngle > _currentAngle)
-				if(relation == LineSegment2D.OTHER_START_TOUCHES_THIS && seg.endDist < seg.startDist)
+				if(relation == LineSegment2D.OTHER_START_TOUCHES_THIS && seg.endDist < (seg.startDist+epsilon))
 				{
 					//touch is new current if angle < bestAngle
 					if(seg.startAngle < bestAngle)
@@ -296,7 +296,7 @@ package net.pixelpracht.algorithm
 					}
 				}
 				//seg.end touches and seg.start visible? (seg.startAngle > _currentAngle)
-				else if(relation == LineSegment2D.OTHER_END_TOUCHES_THIS && seg.startDist < seg.endDist)
+				else if(relation == LineSegment2D.OTHER_END_TOUCHES_THIS && seg.startDist < (seg.endDist+epsilon))
 				{
 					//touch is new current if angle < bestAngle
 					if(seg.endAngle < bestAngle)
@@ -314,25 +314,18 @@ package net.pixelpracht.algorithm
 					_helper.copy(intersection);
 					_helper.subtract(_viewPos);
 					var angle:Number = _helper.polarAngle;
-					if(Math.abs(angle - _currentAngle) > 0.0001) //combat glitches due to limitted precision
+					if(angle > _currentAngle && angle < bestAngle)
 					{
-						var inRange:Boolean = Angle.isEnclosedRad(angle, _currentAngle, bestAngle);
-						if(inRange)
-						{
-							bestPoint = intersection;
-							bestSeg = seg;
-							bestAngle = angle;
-						}
+						bestPoint = intersection;
+						bestSeg = seg;
+						bestAngle = angle;
 					}
 				}
 				cur = cur.next;
 			}
 			//best intersection makes new current
 			if(bestPoint)
-			{
 				addToOutline(bestSeg, bestAngle, bestPoint);
-				handleIntersections(bestAngle);
-			}
 		}
 		
 		//renturns true if a visible subsequent segment was found
